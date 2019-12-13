@@ -26,10 +26,8 @@ path(path,genpath(scriptsDir)); % add scripts dir to matlab search path
 
 subjects = {'subj001','subj002','subj003','subj004','subj005'};
 
-dataDir = p.data;
-mainfigDir=p.figures_dti;
 
-seed = 'nacc';  % define seed roi
+seed = 'mpfc8mm';  % define seed roi
 % seed = 'nacc';
 
 targets=input('target name(s): ','s');

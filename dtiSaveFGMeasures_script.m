@@ -5,11 +5,17 @@
 clear all
 close all
 
-p = getCuePaths;
-[subjects,gi] = getCueSubjects('dti');
-% subjects={'zl150930','dw151003'}
 
-dataDir = p.data;
+mainDir = '/home/span/lvta/dwi_workshop';
+scriptsDir = [mainDir '/scripts']; % this should be the directory where this script is located
+dataDir = [mainDir '/data']; 
+
+% add scripts to matlab's search path
+path(path,genpath(scriptsDir)); % add scripts dir to matlab search path
+
+
+subjects = {'subj001','subj002','subj003','subj004','subj005'};
+
 
 
 % define fiber group to load
@@ -25,9 +31,9 @@ LorR = ['L','R'];
 
 combineLR = 1; % 1 to combine L and R, otherwise, 0
 
-seeds = {'DA','DA','DA','DA','DA'};
-targets = {'nacc','nacc','nacc','caudate','putamen'};
-versionStrs = {'belowAC_autoclean','aboveAC_autoclean','autoclean','autoclean','autoclean'};
+seeds = {'mpfc8mm'}
+targets = {'nacc'};
+versionStrs = {'autoclean'};
 
 
 % seeds = {'DA'};

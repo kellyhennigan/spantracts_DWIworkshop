@@ -15,9 +15,9 @@ import sys
 
 #dataDir = os.path.join(os.path.expanduser('~'),'cueexp','data')	# experiment main data directory
 	
-os.chdir('../../')
+os.chdir('../')
 main_dir=os.getcwd()
-os.chdir('scripts/dmri')
+os.chdir('scripts')
 
 # data directory
 dataDir=main_dir+'/data'
@@ -34,13 +34,11 @@ maskfile = 'wm_mask_dil2.nii.gz' 		# this should be included
 
 # define ROIs 
 roiDir = 'ROIs' 					# directory w/ROI files
-#seedStr = 'mpfc8mm'						# if false, will use the mask as seed ROI by default
+seedStr = 'mpfc8mm'						# if false, will use the mask as seed ROI by default
 #seedStr = 'nacc'					# if false, will use the mask as seed ROI by default
-seedStr = 'DA'
+#seedStr = ''
 
-targetStrs = ['caudate','putamen','nacc']		# can be many or none; if not defined, fibers will just be tracked from the seed ROI
-#targetStrs = ['PVT']		
-#targetStrs = ['nacc']		
+targetStrs = ['nacc']		
 excPath = ''
 #excPath = '/home/hennigan/cueexp/data/ROIs/ACabove_mask.nii.gz'
 
@@ -60,8 +58,8 @@ init_cutoff = ''
 initdir = '0,1,0.5' 		        # vector specifying the initial direction to track fibers from seed to target
 initdir = ''			
 nthreads = 8						# of threads to use for tractography
-dilateRoiStr = '_dil2' 			# if ROI is dilated, add dilation string here
-#dilateRoiStr = '' 					
+#dilateRoiStr = '_dil2' 			# if ROI is dilated, add dilation string here
+dilateRoiStr = '' 					
 force = True						# if true, the command will save over a pre-existing output file with the same name
 
 # define directory for resulting fiber files (relative subject's directory)
@@ -88,27 +86,11 @@ def doCommand(cmd):
 		os.system(cmd)
 
 
-#########  get main data directory and subjects to process	
-def whichSubs():
-	
-	from getCueSubjects import getsubs 
-	subjects,gi = getsubs()
-
-	print ' '.join(subjects)
-
-	input_subs = raw_input('subject id(s) (hit enter to process all subs): ')
-	print '\nyou entered: '+input_subs+'\n'
-
-	if input_subs:
-		subjects=input_subs.split(' ')
-
-	return subjects
-
 
 ######### produce command for fiber tracking	
 if __name__ == '__main__':
     
-	subjects = whichSubs()
+	subjects = ['subj001']
 
 	for subject in subjects:  	# subject loop
 	
