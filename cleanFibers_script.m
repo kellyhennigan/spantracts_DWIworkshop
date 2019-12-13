@@ -15,15 +15,21 @@
 clear all
 close all
 
+mainDir = '/home/span/lvta/dwi_workshop';
+scriptsDir = [mainDir '/scripts']; % this should be the directory where this script is located
+dataDir = [mainDir '/data']; 
 
-% get experiment-specific paths and cd to main data directory
-getCuePaths();
-[p,task,subjects,gi]=whichCueSubjects('stim','');
+
+% add scripts to matlab's search path
+path(path,genpath(scriptsDir)); % add scripts dir to matlab search path
+
+
+subjects = {'subj001','subj002','subj003','subj004','subj005'};
 
 dataDir = p.data;
 mainfigDir=p.figures_dti;
 
-seed = 'DA';  % define seed roi
+seed = 'nacc';  % define seed roi
 % seed = 'nacc';
 
 targets=input('target name(s): ','s');
@@ -48,10 +54,11 @@ fstr = '';
 % out file name for pruned fibers
 outFgStr = [seed '%s_%s%s' fstr '_autoclean']; %s: LorR, target, LorR
 
-plotToScreen = 0; % don't plot to screen
+plotToScreen = 1; % don't plot to screen
 
 saveOutFGMeasures=1; % 1 to compute and save out fiber group measures (fa,md,etc.), otherwise, 0
 dt6file = 'dti96trilin/dt6.mat'; % filepath relative to subject's directory
+
 
 %% get pruning params based on tractography method
 
@@ -66,7 +73,7 @@ switch method
     case {'mrtrix','mrtrix_orig','mrtrix_fa','mrtrix_tournier'}
         
         fgStr = [seed '%s_%s%s' fstr '.tck']; % %s: target, LorR
-        box_thresh = 5;
+%         box_thresh = 5;
         maxIter = 5;  %
         
 end
@@ -77,7 +84,7 @@ maxLen=4;  % " " for pathway length
 numNodes=100;
 M='mean';
 count = 0;
-show = 0; % 1 to plot each iteration, 0 otherwise
+show = 1; % 1 to plot each iteration, 0 otherwise
 
 
 %% DO IT
@@ -130,9 +137,9 @@ for j=1:numel(targets)
                     % reorient fibers so they all start in DA ROI
                     [fg,flipped] = AFQ_ReorientFibers(fg,roi1,roi2);
                     
-                    % remove crazy fibers that deviate outside area defined by box_thresh
-                    fg = pruneFG(fg,roi1,roi2,0,box_thresh);
-                    
+%                     % remove crazy fibers that deviate outside area defined by box_thresh
+%                     fg = pruneFG(fg,roi1,roi2,0,box_thresh);
+%                     
                     % remove outliers and save out cleaned fiber group
                     if numel(fg.fibers)<2
                         

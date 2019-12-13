@@ -4,13 +4,20 @@
 clear all
 close all
 
+mainDir = '/home/span/lvta/dwi_workshop';
+scriptsDir = [mainDir '/scripts']; % this should be the directory where this script is located
+dataDir = [mainDir '/data']; 
 
-[p,task,subjects,gi]=whichCueSubjects('stim','');
-dataDir = p.data;
+
+% add scripts to matlab's search path
+path(path,genpath(scriptsDir)); % add scripts dir to matlab search path
+
+
+subjects = {'subj001','subj002','subj003','subj004','subj005'};
+
 
 inRoiFile = fullfile(dataDir,'ROIs','%s.nii.gz'); % directory with tlrc space ROIs
-roiNames = {'DA','PVT'};
-% roiNames = {'mpfc8mmL','mpfc8mmR'};
+roiNames = {'mpfc8mmL','mpfc8mmR'};
 
 outRoiFile = fullfile(dataDir,'%s','ROIs','%s.nii.gz'); % %s is subject & roiName
 
