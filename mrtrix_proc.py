@@ -50,9 +50,9 @@ xc = bool(input('enter 1 for yes, or 0 to only print: '))
 
 #data_dir = os.path.join(os.path.expanduser('~'),'cueexp','data') # main data directory
 #data_dir = '/scratch/PI/knutson/cue_dti/data'
-os.chdir('../../')
+os.chdir('../')
 main_dir=os.getcwd()
-os.chdir('scripts/dmri')
+os.chdir('scripts')
 
 # data directory
 data_dir=main_dir+'/data'
@@ -107,24 +107,6 @@ def doCommand(cmd):
 	if xc is True:
 		os.system(cmd)
 
-
-
-#########  get main data directory and subjects to process	
-def whichSubs():
-
-	from getCueSubjects import getsubs 
-	subjects,gi = getsubs()
-
-	print ' '.join(subjects)
-
-	input_subs = raw_input('subject id(s) (hit enter to process all subs): ')
-	print '\nyou entered: '+input_subs+'\n'
-
-	if input_subs:
-		subjects=input_subs.split(' ')
-
-	return subjects
-	
 
 
 ######### set up mrtrix directory and files
@@ -282,7 +264,7 @@ def wbFiberDensity():
 if __name__ == '__main__':
 
 	
-	subjects = whichSubs()
+	subjects = ['subj001']
 
 
 	# now loop through subjects	
@@ -353,24 +335,12 @@ if __name__ == '__main__':
 				doCommand(cmd)
 
 		
-		# dilate putamen, caudate, nacc, and DA ROIs 
-		cmd = 'maskfilter -npass 2 ROIs/caudateL.nii.gz dilate ROIs/caudateL_dil2.nii.gz'
-		doCommand(cmd)
-		cmd = 'maskfilter -npass 2 ROIs/caudateR.nii.gz dilate ROIs/caudateR_dil2.nii.gz'
-		doCommand(cmd)
-		cmd = 'maskfilter -npass 2 ROIs/naccL.nii.gz dilate ROIs/naccL_dil2.nii.gz'
-		doCommand(cmd)
-		cmd = 'maskfilter -npass 2 ROIs/naccR.nii.gz dilate ROIs/naccR_dil2.nii.gz'
-		doCommand(cmd)
-		cmd = 'maskfilter -npass 2 ROIs/putamenL.nii.gz dilate ROIs/putamenL_dil2.nii.gz'
-		doCommand(cmd)
-		cmd = 'maskfilter -npass 2 ROIs/putamenR.nii.gz dilate ROIs/putamenR_dil2.nii.gz'
-		doCommand(cmd)
-		cmd = 'maskfilter -npass 2 ROIs/DAL.nii.gz dilate ROIs/DAL_dil2.nii.gz'
-		doCommand(cmd)
-		cmd = 'maskfilter -npass 2 ROIs/DAR.nii.gz dilate ROIs/DAR_dil2.nii.gz'
-		doCommand(cmd)
-
+		# dilate ROI masks? 
+		# cmd = 'maskfilter -npass 2 ROIs/naccL.nii.gz dilate ROIs/naccL_dil2.nii.gz'
+		# doCommand(cmd)
+		# cmd = 'maskfilter -npass 2 ROIs/naccR.nii.gz dilate ROIs/naccR_dil2.nii.gz'
+		# doCommand(cmd)
+	
 
 
 		print 'FINISHED SUBJECT '+subject
