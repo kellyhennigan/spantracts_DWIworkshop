@@ -2,6 +2,9 @@
 
 Brain regions communicate via long-range axonal connections, referred to as "white matter" because they are covered in fatty (myelin) sheaths that allow for faster communication. Diffusion-weighted imaging allows us to quantify some of the structural properties of these connections. This repository describes a pipeline for getting these structural measurements for tracts of interest, starting from raw diffusion-weighted imaging data. 
 
+This pipeline focuses on tracking fibers between 1) VTA and nucleus accumbens and 2) medial prefrontal cortex and nucleus accumbens. It's very similar to Josiah's tractography pipeline, which is well-documented here: https://github.com/josiahkl/spantracts
+
+
 
 ## Getting started
 
@@ -11,11 +14,10 @@ Brain regions communicate via long-range axonal connections, referred to as "whi
 * [Python 2.7](https://www.python.org/)
 * [Matlab](https://www.mathworks.com/products/matlab.html)
 * [matlab package, VISTASOFT](https://github.com/vistalab/vistasoft) 
-* [spm as a VISTASOFT dependency](https://www.fil.ion.ucl.ac.uk/spm/) 
+* [matlab package, spm (as a VISTASOFT dependency)](https://www.fil.ion.ucl.ac.uk/spm/) 
 * [matlab package, AFQ](https://github.com/yeatmanlab/AFQ)
 * [mrtrix 3.0](http://www.mrtrix.org/) 
 * [freesurfer](https://surfer.nmr.mgh.harvard.edu/) 
-* [spantracts (in-house custom scripts for running this pipeline)](https://github.com/spanlab/spantoolbox/tree/master/spantracts)
 * [ANTs (coregistration software)](http://stnava.github.io/ANTs/)
 
 ### Directory structure 
@@ -91,7 +93,7 @@ In matlab, run:
 convertFsSegFiles_script.m
 createRoiMasks_script.m
 ```
-To convert freesurfer segmentation files to be in nifti format & save out desired ROI masks based on FS segmentation labels. 
+To convert freesurfer segmentation files to be in nifti format & save out desired ROI masks based on FS segmentation labels. For example, save out NAcc, caudate, and putamen ROIs.  
 
 #### output
 Saves out files to directory, **projectdir/data/subjid/anat_proc**
@@ -107,7 +109,7 @@ and then in matlab, run:
 ```
 xformROIs_script.m
 ```
-To estimate the tranform (using ANTs) between subject's acpc-aligned native space and standard space and to apply the inverse transform to take a given ROI in standard space > subject native space. 
+To estimate the tranform (using ANTs) between subject's acpc-aligned native space and standard space and to apply the inverse transform to take a given ROI in standard space > subject native space. For example, save out ROIs in native space that we defined on a group template, like VTA/SN, mPFC sphere, etc. 
 
 #### output
 Saves out acpc-aligned<->standard space transforms to directory, **projectdir/data/subjid/anat_proc**, and saves out a midbrain ROI ("DA.nii.gz") in directory: **projectdir/data/subjid/ROIs**
@@ -172,8 +174,10 @@ dtiSaveFGMeasures_script & dtiSaveFGMeasures_csv_script
 ```
 
 ### Correlate diffusivity measurements with personality and/or fMRI measures, e.g., impulsivity
-Add scripts here for conducting individual difference analyses
-
+In matlab:
+```
+add scripts here...
+```
 
 ### Quality Assurance (QA)
 Quality assurance checks should always be performed on data. Some common issues that can go wrong: 
