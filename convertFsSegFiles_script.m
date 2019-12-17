@@ -22,14 +22,21 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 clear all
 close all
 
 
-p=getFmrieatPaths;
-subjects=getFmrieatSubjects();
+mainDir = '/home/span/lvta/dwi_workshop';
+scriptsDir = [mainDir '/scripts']; % this should be the directory where this script is located
+dataDir = [mainDir '/data']; 
 
-dataDir = p.derivatives;
+
+% add scripts to matlab's search path
+path(path,genpath(scriptsDir)); % add scripts dir to matlab search path
+
+
+subjects = {'subj001','subj002','subj003','subj004','subj005'};
 
 !source $FREESURFER_HOME/SetUpFreeSurfer.sh
 fshome = getenv('FREESURFER_HOME');

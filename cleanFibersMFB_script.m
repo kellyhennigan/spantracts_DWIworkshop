@@ -12,15 +12,23 @@
 
 
 % define variables, directories, etc.
+
 clear all
 close all
 
 
-% get experiment-specific paths and cd to main data directory
-getCuePaths();
-[p,task,subjects,gi]=whichCueSubjects('stim','');
-dataDir = p.data;
-mainfigDir=p.figures_dti;
+mainDir = '/home/span/lvta/dwi_workshop';
+scriptsDir = [mainDir '/scripts']; % this should be the directory where this script is located
+dataDir = [mainDir '/data']; 
+
+
+% add scripts to matlab's search path
+path(path,genpath(scriptsDir)); % add scripts dir to matlab search path
+
+
+subjects = {'subj001','subj002','subj003','subj004','subj005'};
+
+mainfigDir=[mainDir '/figures'];
 
 seed = 'DA';  % define seed roi
 

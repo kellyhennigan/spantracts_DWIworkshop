@@ -98,15 +98,20 @@ clear all
 close all
 
 
-p=getFmrieatPaths;
-subjects=getFmrieatSubjects();
+mainDir = '/home/span/lvta/dwi_workshop';
+scriptsDir = [mainDir '/scripts']; % this should be the directory where this script is located
+dataDir = [mainDir '/data']; 
 
-dataDir = p.derivatives;
+
+% add scripts to matlab's search path
+path(path,genpath(scriptsDir)); % add scripts dir to matlab search path
+
+
+subjects = {'subj001','subj002','subj003','subj004','subj005'};
 
 % path to freesurfer segmentation file; %s is subject id
-segFilePath = fullfile(dataDir,'%s','anat_proc','aparc+aseg.nii.gz');  % subject's aparc+aseg nii file
+segFilePath = fullfile(dataDir,'%s','t1','aparc+aseg.nii.gz');  % subject's aparc+aseg nii file
 
-t1FilePath = fullfile(dataDir,'%s','anat_proc','t1_acpc.nii.gz');  % subject's acpc-aligned t1 file
 
 % %s is subject id
 outDir = fullfile(dataDir,'%s','ROIs');
@@ -122,9 +127,16 @@ labels = {26,58;
     12,51}; 
 
 
+%%%%% Josiah's notes for freesurfer segmentation labels for tracking
+%%%%% vlpfc-insula & insula-nacc:
 
+% vlpfc = 12113 / 11113
+% anterior insula = 12148 / 11148
+% short gyrus of insula = 12118 / 11118
+% for ains-nacc tract, combine anterior and short insula parcellations.
+% for ains-vlpfc tract, use only short insula parcellation.
 
-%% Get to it
+%% Run it 
 
 for i = 1:length(subjects)          % subject loop
     
@@ -132,8 +144,7 @@ for i = 1:length(subjects)          % subject loop
     
     fprintf(['\n\nworking on subject ' subject '...\n\n']);
     
-    subjSegFilePath = sprintf(segFilePath,subject);
-    subjT1FilePath = sprintf(t1FilePath,subject);
+    seg = niftiRead(sprintf(segFilePath,subject));
     
     % define this out dir if it doesn't already exist
     thisOutDir = sprintf(outDir,subject);
@@ -143,34 +154,28 @@ for i = 1:length(subjects)          % subject loop
     
     for j = 1:numel(roiNames)
         
+        % create & save out left ROI
+        roiL = createNewNii(seg,[thisOutDir '/' roiNames{j} 'L']);
+        roiL.data(seg.data == labels{j,1})=1; roiL.data = single(roiL.data);
+        writeFileNifti(roiL);
+        roiNiftiToMat(roiL,1);
         
-        % save out left ROI
-        roiName=roiNames{j};
-        labelL=labels{j,1};
-      
-        outNameL=fullfile(thisOutDir,[roiNames{j} 'L']);
-        dtiConvertFreeSurferRoiToMat(subjSegFilePath,labelL,outNameL);
-        roiL=roiMatToNifti(outNameL,subjT1FilePath,1);
+        % " " right ROI
+        roiR = createNewNii(seg,[thisOutDir '/' roiNames{j} 'R']);
+        roiR.data(seg.data == labels{j,2})=1; roiR.data = single(roiR.data);
+        writeFileNifti(roiR);
+        roiNiftiToMat(roiR,1);
         
-        % save out right ROI
-        labelR=labels{j,2};
-      
-        outNameR=fullfile(thisOutDir,[roiNames{j} 'R']);
-        dtiConvertFreeSurferRoiToMat(subjSegFilePath,labelR,outNameR);
-        roiR=roiMatToNifti(outNameR,subjT1FilePath,1);
-     
-        %  now combine L & R and save out
-        roi = createNewNii(roiL,[thisOutDir '/' roiName ]);
+        %         now combine L & R and save out
+        roi = createNewNii(seg,[thisOutDir '/' roiNames{j} ]);
         roi.data = roiL.data+roiR.data;
         if any(roi.data(:)>1)
             error(['hold up - L and R ' roiNames{j} ' have overlappling voxels, which shouldn''t happen...'])
         end
         writeFileNifti(roi);
-        roiNiftiToMat(roi,1);
         
     end % rois
      
      fprintf(['done with subject ' subject '.\n\n']);
     
 end % subjects
-

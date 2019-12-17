@@ -170,7 +170,8 @@ Saves out fiber group files to directory, **projectdir/data/subjid/fibers**
 ### Save out measurements from fiber bundles cores
 In matlab:
 ```
-dtiSaveFGMeasures_script & dtiSaveFGMeasures_csv_script
+dtiSaveFGMeasures_script  
+dtiSaveFGMeasures_csv_script
 ```
 
 ### Correlate diffusivity measurements with personality and/or fMRI measures, e.g., impulsivity

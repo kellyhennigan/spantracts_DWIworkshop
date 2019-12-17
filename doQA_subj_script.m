@@ -1,58 +1,46 @@
 
 %%%%%%%% do QA on motion on data from cue fmri experiment
 
+
 clear all
 close all
 
-p=getFmrieatPaths;
+mainDir = '/home/span/lvta/dwi_workshop';
+scriptsDir = [mainDir '/scripts']; % this should be the directory where this script is located
+dataDir = [mainDir '/data'];
+mainfigDir = [mainDir '/figures'];
 
-dataDir = p.derivatives;
-
-% task = input('cue or dti task?','s');
-task='cue';
-
-%
-subjects=getFmrieatSubjects();
+% add scripts to matlab's search path
+path(path,genpath(scriptsDir)); % add scripts dir to matlab search path
 
 
-figDir = fullfile(p.figures,'QA',task);
+subjects = {'subj001','subj002','subj003','subj004','subj005'};
 
 
 savePlots = 1; % 1 to save plots, otherwise 0
 
+figDir = fullfile(mainfigDir,'QA');
+
+task='dti';
+
 %%
 
-% define file with task motion params based on task
-switch task
-    
-    case 'dti'
-        
-        mp_file = [dataDir '/%s/dti96trilin/dwi_aligned_trilin_ecXform.mat']; % func data dir, %s is subject id
-        
-        vox_mm = 2; % dti voxel dimensions are 2mm isotropic
-        
-        en_thresh = 5; % euclidean norm threshold for calling a TR "bad"
-        
-        % what percentage of bad volumes should lead to excluding a subject for
-        % motion?
-        %         1% threshold means excluding for 2 bad volumes or more (there are
-        %         105 vols)
-        percent_bad_thresh = 1;
-        
-        roi_str = 'wmMask';
-        roits_file = [dataDir '/%s/dti96trilin/' roi_str '_ts'];
-        
-    otherwise % for fmri tasks
-        
-        mp_file = [dataDir '/%s/func_proc/' task '_vr.1D']; % motion param file where %s is task
-        
-        en_thresh = .5;
-        percent_bad_thresh = 5;
-        
-        roi_str = 'nacc';
-        roits_file = [dataDir '/%s/func_proc/' task '_' roi_str '_ts.1D']; % roi time series file to plot where %s is task
-        
-end
+mp_file = [dataDir '/%s/dti96trilin/dwi_aligned_trilin_ecXform.mat']; % func data dir, %s is subject id
+
+vox_mm = 2; % dti voxel dimensions are 2mm isotropic
+
+en_thresh = 5; % euclidean norm threshold for calling a TR "bad"
+
+% what percentage of bad volumes should lead to excluding a subject for
+% motion?
+%         1% threshold means excluding for 2 bad volumes or more (there are
+%         105 vols)
+percent_bad_thresh = 1;
+
+roi_str = 'wmMask';
+roits_file = [dataDir '/%s/dti96trilin/' roi_str '_ts'];
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -72,30 +60,18 @@ for s = 1:numel(subjects)
     
     mp = []; % this subject's motion params
     
-    % get task motion params
-    switch task
-        
-        case 'dti'
-            
-            try
-                load(sprintf(mp_file,subject)); % loads a structural array, "xform"
-                mp=vertcat(xform(:).ecParams);
-                mp = mp(:,[1:3 5 4 6]); % rearrange to be in order dx,dy,dz,roll,pitch,yaw
-                mp(:,1:3) = mp(:,1:3).*vox_mm; % change displacement to be in units of mm
-                mp(:,4:6) = mp(:,4:6)/(2*pi)*360; % convert rotations to units of degrees
-            catch
-                warning(['couldnt get motion params for subject ' subject ', so skipping...'])
-            end
-            
-        otherwise  % for fmri tasks
-            
-            try
-                mp = dlmread(sprintf(mp_file,subject));
-                mp = mp(:,[6 7 5 2:4]); % rearrange to be in order dx,dy,dz,roll,pitch,yaw
-            catch
-                warning(['couldnt get motion params for subject ' subject ', so skipping...'])
-            end
+    
+    try
+        load(sprintf(mp_file,subject)); % loads a structural array, "xform"
+        mp=vertcat(xform(:).ecParams);
+        mp = mp(:,[1:3 5 4 6]); % rearrange to be in order dx,dy,dz,roll,pitch,yaw
+        mp(:,1:3) = mp(:,1:3).*vox_mm; % change displacement to be in units of mm
+        mp(:,4:6) = mp(:,4:6)/(2*pi)*360; % convert rotations to units of degrees
+    catch
+        warning(['couldnt get motion params for subject ' subject ', so skipping...'])
     end
+    
+    
     
     if isempty(mp)
         max_en(s,1)=nan; max_TR(s,1)=nan; nBad(s,1)=nan; omit_idx(s,1)=nan;
