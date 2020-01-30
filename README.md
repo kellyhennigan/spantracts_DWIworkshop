@@ -151,7 +151,7 @@ python mrtrix_fibertrack.py
 ```
 tracks fiber pathways between 2 ROIs with desired parameters 
 
-##### output
+#### output
 Saves out files to directory, **projectdir/data/subjid/fibers/dti96trilin/mrtrix**
 
 
@@ -162,7 +162,7 @@ cleanFibers_script
 ```
 uses AFQ software to iteratively remove errant fibers 
 
-##### output
+#### output
 Saves out fiber group files to directory, **projectdir/data/subjid/fibers**
 
 Also saves out images of pruned fiber bundles for QA purposes, for example: 
@@ -178,7 +178,7 @@ plot_singlesub_fgs_script
 ```
 uses AFQ software to plot fiber bundles with a subject's anatomy as an underlay. This script contains a lot of hard-coded plotting parameters that are good for visualizing the medial forebrain bundle. I suggest using it as a example of how to use the AFQ plotting functions and you can take it from there. 
 
-##### output
+#### output
 This script creates figures like this: 
 ![Alt text](subj001_DA_NAcc_2fgs_wholebrain_leftsagittal.png?raw=true "example subject's left DA to Nacc fiber bundles, wholebrain view")
 ![Alt text](subj001_DA_NAcc_2fgs_leftsagittal.png?raw=true "example subject's left DA to Nacc fiber bundles, close-up")
@@ -193,7 +193,7 @@ dtiSaveFGMeasures_script
 dtiSaveFGMeasures_csv_script
 ```
 
-##### output
+#### output
 script, dtiSaveFGMeasures_csv_script saves out a csv file with desired diffusion measurements (fa, md, ad, rd) for each subject. 
 
 
