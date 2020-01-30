@@ -27,9 +27,9 @@ task='dti';
 
 mp_file = [dataDir '/%s/dti96trilin/dwi_aligned_trilin_ecXform.mat']; % func data dir, %s is subject id
 
-vox_mm = 2; % dti voxel dimensions are 2mm isotropic
+vox_mm = 2; % dti voxel dimensions are 2mm isotropic (CHANGE HERE AS NEEDED FOR DIFFERENT PROJECTS)
 
-en_thresh = 5; % euclidean norm threshold for calling a TR "bad"
+en_thresh = 3; % euclidean norm threshold for calling a TR "bad"
 
 % what percentage of bad volumes should lead to excluding a subject for
 % motion?
@@ -143,5 +143,4 @@ end % subjects
 %% show where censored TRs are
 
 
-
-%%
+%% other QA steps? 

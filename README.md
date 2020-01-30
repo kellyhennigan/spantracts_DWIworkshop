@@ -114,7 +114,7 @@ To estimate the tranform (using ANTs) between subject's acpc-aligned native spac
 #### output
 Saves out acpc-aligned<->standard space transforms to directory, **projectdir/data/subjid/anat_proc**, and saves out a midbrain ROI ("DA.nii.gz") in directory: **projectdir/data/subjid/ROIs**
 
-
+At this point, you should have ROI masks that will be used for tractography. Make sure these look how you expect!! To check that, load a subject's anatomy (t1.nii.gz) and ROI masks into your viewer of choice (e.g., ITKSnap, MRIcron, afni, FSL's viewer, or mrtrix's viewer, mrview) and confirm that the masks align nicely to the regions you care about. 
 
 ### Pre-process diffusion data
 In Matlab, run:
@@ -165,6 +165,20 @@ uses AFQ software to iteratively remove errant fibers
 ##### output
 Saves out fiber group files to directory, **projectdir/data/subjid/fibers**
 
+Also saves out images of pruned fiber bundles for QA purposes, for example: 
+![Alt text](jj190821.png?raw=true "example subject's MFB after pruning")
+
+Note that the figure windows in matlab can be rotated with user's cursor to visualize fiber bundle from all angles. 
+
+### Finally, visualize fiber bundles! 
+In matlab:
+```
+plot_singlesub_fgs_script
+```
+uses AFQ software to plot iteratively remove errant fibers 
+
+##### output
+Saves out fiber group files to directory, **projectdir/data/subjid/fibers**
 
 
 ### Save out measurements from fiber bundles cores
@@ -174,7 +188,11 @@ dtiSaveFGMeasures_script
 dtiSaveFGMeasures_csv_script
 ```
 
-### Correlate diffusivity measurements with personality and/or fMRI measures, e.g., impulsivity
+##### output
+script, dtiSaveFGMeasures_csv_script saves out a csv file with desired diffusion measurements (fa, md, ad, rd) for each subject. 
+
+
+### Correlate diffusivity measurements with personality and/or fMRI measures, e.g., impulsivity scores:
 In matlab:
 ```
 add scripts here...
@@ -184,19 +202,7 @@ add scripts here...
 Quality assurance checks should always be performed on data. Some common issues that can go wrong: 
 
 #### bad co-registration
-In a viewer, load subject's co-registered anatomy and B0 volumes (files "t1.nii.gz" and "B0.nii.gz"). These should be reasonably aligned. If they aren't, it means that ROI masks (defined based on anatomy) won't be well-aligned to the diffusion data, which could cause problems, especially for small VOIs. 
-
-Here's an example of decent coregistration: 
-<p align="center">
-  <img width="161" height="151" src="https://github.com/kellyhennigan/projectdir/blob/master/coreg_examples/decent_coreg_y.jpg">
-</p>
-
-And here's an example of bad coregistration (where something went terribly wrong!)
-<p align="center">
-  <img width="161" height="151" src="https://github.com/kellyhennigan/projectdir/blob/master/coreg_examples/bad_coreg_y.jpg">
-</p>
-
-To correct bad coregistration, follow instuctions outlined in `preprocess_anat_nudge.sh`, then run that instead of preprocess_anat.sh. If coregistration then looks fixed, run `preprocess_cue.sh` as usual. 
+In a viewer, load subject's co-registered anatomy and B0 volumes (files "t1.nii.gz" and "B0.nii.gz"). These should be reasonably aligned. If they aren't, it means that ROI masks (defined based on anatomy) won't be well-aligned to the diffusion data, which could cause problems, especially for small ROIs. 
 
 #### bad head motion
 In matlab, run: 
@@ -208,6 +214,17 @@ and then:
 doQA_group_script.m
 ```
 to save out figures showing head motion. Figures saved out to **projdir/figures/QA/dwi**. These can be used to determine whether a subject should be excluded due to bad motion. 
+
+#### tractography issues
+Tractography can fail for a number of reasons: bad ROI mask alignment, bad alignment of the brain mask used to constrain tractography, or noisy data, to name a few. Check the number of fibers output from the mrtrix tractography step with the following terminal command: 
+```
+tckinfo [name of .tck file]
+```
+which will print out some info into the terminal window; the # of tracks is the "count" variable. 
+
+
+
+
 
 
 

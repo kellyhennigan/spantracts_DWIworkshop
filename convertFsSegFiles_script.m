@@ -42,7 +42,15 @@ subjects = {'subj001','subj002','subj003','subj004','subj005'};
 fshome = getenv('FREESURFER_HOME');
 % setenv('FREESURFER_HOME',fshome);  % this to tell where FS folder is
 
+% output from freesurfer's pipeline is saved in a freesurfer-specific
+% subject directory. Specify where that is here, using '%s' for the subject
+% ID (which will be filled in in the subject loop). 
+fsSegFilesDir = '/usr/local/freesurfer/subjects/%s/mri'; % freesurfer subject mri dir
 
+ 
+% dir for subject's out files, with '%s' for subj ID 
+outDirPath = [dataDir '/%s/t1']; 
+  
 for s=1:numel(subjects)
     
     subject = subjects{s};
@@ -50,9 +58,8 @@ for s=1:numel(subjects)
     fprintf(['\n\nworking on subject ' subject '...\n\n']);
     
     
-    inDir = ['/usr/local/freesurfer/subjects/' subject '/mri']; % freesurfer subject mri dir
-    subjDir = ['/home/span/lvta/fmrieat/derivatives/' subject ];
-    outDir = [subjDir '/anat_proc']; % dir for out nifti files
+    inDir = sprintf(fsSegFilesDir,subject);  % directory where input files are located
+    outDir = sprintf(outDirPath,subject); % " " where output files will be saved
     
     
     %% do it
