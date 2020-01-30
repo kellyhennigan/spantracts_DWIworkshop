@@ -58,9 +58,9 @@ where 'path/to/directories/with/matlab/scripts' is, e.g., 'projectdir/scripts'.
 - [Mrtrix pre-processing steps](#mrtrix-pre-processing-steps)
 - [fiber tractography](#track-fibers)
 - [Clean fiber bundles](#clean-fiber-bundles)
+- [Visualization](#Visualization)
 - [Save out measurements from fiber bundles cores](#save-out-measurements-from-fiber-bundles-cores)
 - [Correlate diffusivity measures with behavioral and functional measures](#correlate-diffusivity-measures-with-behavioral-and-functional-measures)
-- [Create density maps of fiber group endpoints](#create-density-maps-of-fiber-group-endpoints)
 - [Quality Assurance checks](#QA)
 
 
@@ -170,15 +170,20 @@ Also saves out images of pruned fiber bundles for QA purposes, for example:
 
 Note that the figure windows in matlab can be rotated with user's cursor to visualize fiber bundle from all angles. 
 
-### Finally, visualize fiber bundles! 
-In matlab:
+
+### Visualization
+Finally, visualize the fiber bundles you worked so hard to find! In matlab:
 ```
 plot_singlesub_fgs_script
 ```
-uses AFQ software to plot iteratively remove errant fibers 
+uses AFQ software to plot fiber bundles with a subject's anatomy as an underlay. This script contains a lot of hard-coded plotting parameters that are good for visualizing the medial forebrain bundle. I suggest using it as a example of how to use the AFQ plotting functions and you can take it from there. 
 
 ##### output
-Saves out fiber group files to directory, **projectdir/data/subjid/fibers**
+This script creates figures like this: 
+![Alt text](subj001_DA_NAcc_2fgs_wholebrain_leftsagittal.png?raw=true "example subject's left DA to Nacc fiber bundles, wholebrain view")
+![Alt text](subj001_DA_NAcc_2fgs_leftsagittal.png?raw=true "example subject's left DA to Nacc fiber bundles, close-up")
+
+Note that the figure windows in matlab can be rotated with user's cursor to visualize fiber bundle from all angles. 
 
 
 ### Save out measurements from fiber bundles cores
