@@ -17,6 +17,9 @@ import os,sys,glob
 
 data_dir = os.path.join(os.path.expanduser('~'),'cueexp','data')
 
+# list of subject IDs to process
+subjects = ['subj001','subj002','subj003','subj004','subj005']
+
 t1_dir = os.path.join(data_dir,'%s','t1')  # first %s is data_dir & 2nd is subject id
 
 mni_file = os.path.join(data_dir,'templates','mni_icbm152_nlin_asym_09a_nifti','mni_icbm152_t1_tal_nlin_asym_09a.nii') # %s is data_dir
@@ -42,29 +45,10 @@ def doCommand(cmd):
 		os.system(cmd)
 	
 
-#########  get main data directory and subjects to process	
-def whichSubs():
-
-	
-	from getCueSubjects import getsubs 
-	subjects,gi = getsubs()
-
-	print ' '.join(subjects)
-
-	input_subs = raw_input('subject id(s) (hit enter to process all subs): ')
-	print '\nyou entered: '+input_subs+'\n'
-
-	if input_subs:
-		subjects=input_subs.split(' ')
-
-	return subjects
-	
-
 
 if __name__ == '__main__':
 
-	subjects = whichSubs()
-
+	
 	for subject in subjects:
 		
 		print 'WORKING ON SUBJECT '+subject+'\n'

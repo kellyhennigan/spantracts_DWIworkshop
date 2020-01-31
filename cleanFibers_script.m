@@ -135,7 +135,7 @@ for j=1:numel(targets)
                     % reorient fibers so they all start in DA ROI
                     [fg,flipped] = AFQ_ReorientFibers(fg,roi1,roi2);
                     
-%                     % remove crazy fibers that deviate outside area defined by box_thresh
+%                     % if needed, remove crazy fibers that deviate outside the area defined by box_thresh parameters: 
 %                     fg = pruneFG(fg,roi1,roi2,0,box_thresh);
 %                     
                     % remove outliers and save out cleaned fiber group

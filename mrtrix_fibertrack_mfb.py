@@ -21,6 +21,9 @@ os.chdir('scripts/dmri')
 # data directory
 dataDir=main_dir+'/data'
 	
+# list of subject IDs to process
+subjects = ['subj001','subj002','subj003','subj004','subj005']
+
 
 # define input directory and files relative to subject's directory 
 method = 'mrtrix_fa'
@@ -82,27 +85,11 @@ def doCommand(cmd):
 		os.system(cmd)
 
 
-#########  get main data directory and subjects to process	
-def whichSubs():
-	
-	from getCueSubjects import getsubs 
-	subjects,gi = getsubs()
-
-	print ' '.join(subjects)
-
-	input_subs = raw_input('subject id(s) (hit enter to process all subs): ')
-	print '\nyou entered: '+input_subs+'\n'
-
-	if input_subs:
-		subjects=input_subs.split(' ')
-
-	return subjects
 
 
 ######### produce command for fiber tracking	
 if __name__ == '__main__':
     
-	subjects = whichSubs()
 
 	for subject in subjects:  	# subject loop
 	

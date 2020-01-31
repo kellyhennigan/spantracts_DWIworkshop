@@ -22,7 +22,10 @@ os.chdir('scripts')
 data_dir=main_dir+'/data'
 #data_dir = os.path.join(os.path.expanduser('~'),'cueexp','data')
 
-t1_dir = os.path.join(data_dir,'%s','t1')  # first %s is data_dir & 2nd is subject id
+# list of subject IDs to process
+subjects = ['subj001','subj002','subj003','subj004','subj005']
+
+t1_dir = os.path.join(data_dir,'%s','t1')  # %s is subject id
 
 tlrc_file = os.path.join(data_dir,'templates','TT_N27.nii') # %s is data_dir
 
@@ -30,8 +33,7 @@ print 'execute commands?'
 xc = bool(input('enter 1 for yes, or 0 to only print: '))
 	
 
-
-# add ants directory to path
+# add ants directory to path (edit as needed)
 os.system('export PATH=$PATH:'+os.path.join(os.path.expanduser('~')+'/repos/antsbin/bin'))
 
 
@@ -47,29 +49,6 @@ def doCommand(cmd):
 	if xc is True:
 		os.system(cmd)
 	
-
-#########  get main data directory and subjects to process	
-def whichSubs(base_dir='cueexp'):
-
-	
-	if base_dir=='cueexp':
-		from getCueSubjects import getsubs 
-		subjects,gi = getsubs()
-	elif base_dir=='cueexp_claudia':
-		from getCueSubjects import getsubs_claudia
-		subjects,gi = getsubs_claudia()
-
-	print ' '.join(subjects)
-
-	input_subs = raw_input('subject id(s) (hit enter to process all subs): ')
-	print '\nyou entered: '+input_subs+'\n'
-
-	if input_subs:
-		subjects=input_subs.split(' ')
-
-	return subjects
-	
-
 
 
 	
@@ -100,7 +79,6 @@ def convertToNifti(inFile,out_str=''):
 
 if __name__ == '__main__':
 
-	subjects = whichSubs()
 
 	for subject in subjects:
 		

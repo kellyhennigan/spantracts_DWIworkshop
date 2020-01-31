@@ -10,23 +10,28 @@
 % also saves out a .mat file that has info on the parameters used to
 % determine outliers in the cleaning procedure.
 
-
 % define variables, directories, etc.
+
 clear all
 close all
 
 
-% get experiment-specific paths and cd to main data directory
-getCuePaths();
-[p,task,subjects,gi]=whichCueSubjects('stim','');
+mainDir = '/home/span/lvta/dwi_workshop';
+scriptsDir = [mainDir '/scripts']; % this should be the directory where this script is located
+dataDir = [mainDir '/data']; 
 
-dataDir = p.data;
-% subjects = getCueSubjects('dti');
-mainfigDir=p.figures_dti;
+
+% add scripts to matlab's search path
+path(path,genpath(scriptsDir)); % add scripts dir to matlab search path
+
+
+subjects = {'subj001','subj002','subj003','subj004','subj005'};
+
+mainfigDir=[mainDir '/figures'];
 
 seed = 'DA';  % define seed roi
 
-targets = {'nacc'};
+target = 'nacc';
 
 % LorR = ['R'];
 LorR = upper(input('L, R, or both? ','s'));
@@ -78,10 +83,6 @@ show = 0; % 1 to plot each iteration, 0 otherwise
 
 %% DO IT
 
-
-for j=1:numel(targets)
-    
-    target = targets{j};
     
     for lr=LorR
         
@@ -127,20 +128,9 @@ for j=1:numel(targets)
                     % reorient fibers so they all start in DA ROI
                     [fg,flipped] = AFQ_ReorientFibers(fg,roi1,roi2);
                     
-                    % remove fibers that deviate out of DA<-> nacc (above AC) trajectory
-                    fg = pruneAboveACMFBFG(subject,lr,fg,roi1,roi2,0,box_thresh);
-                    
-                    %                 % remove crazy fibers that deviate outside area defined by box_thresh
-                    %                 fg = pruneFG(fg,roi1,roi2,0,box_thresh);
-                    %
-                    %                 % remove fibers that go under the AC
-                    %                 yend=cellfun(@(x) x(2,end), fg.fibers);
-                    %                 zend=cellfun(@(x) x(3,end), fg.fibers);
-                    %                 keep_idx=ones(numel(fg.fibers),1);
-                    %                 keep_idx(yend<1 & zend<0)=0;
-                    %                 fg=getSubFG(fg,find(keep_idx),fg.name);
-                    
-                    
+                    % if needed, remove crazy fibers that deviate outside the area defined by box_thresh parameters: 
+%                     fg = pruneFG(fg,roi1,roi2,0,box_thresh);
+
                     % remove outliers and save out cleaned fiber group
                     if numel(fg.fibers)<2
                         

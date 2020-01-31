@@ -22,6 +22,8 @@ os.chdir('scripts')
 # data directory
 dataDir=main_dir+'/data'
 
+# list of subject IDs to process
+subjects = ['subj001','subj002','subj003','subj004','subj005']
 
 # define input directory and files relative to subject's directory 
 method = 'mrtrix_fa'
@@ -90,8 +92,7 @@ def doCommand(cmd):
 ######### produce command for fiber tracking	
 if __name__ == '__main__':
     
-	subjects = ['subj001']
-
+    
 	for subject in subjects:  	# subject loop
 	
 		print '\nWORKING ON SUBJECT '+subject+'...\n'

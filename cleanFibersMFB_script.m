@@ -128,9 +128,9 @@ for lr=LorR
             % reorient fibers so they all start in DA ROI
             [fg,flipped] = AFQ_ReorientFibers(fg,roi1,roi2);
             
-            % remove fibers that deviate out of MFB trajectory
-            fg = pruneMFBFG(subject,lr,fg,roi1,roi2,0,box_thresh);
-            
+           % if needed, remove crazy fibers that deviate outside the area defined by box_thresh parameters: 
+%            fg = pruneFG(fg,roi1,roi2,0,box_thresh);
+
             % remove outliers and save out cleaned fiber group
             if numel(fg.fibers)<2
                 

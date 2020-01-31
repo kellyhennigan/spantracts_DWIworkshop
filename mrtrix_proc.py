@@ -57,6 +57,8 @@ os.chdir('scripts')
 # data directory
 data_dir=main_dir+'/data'
 
+# list of subject IDs to process
+subjects = ['subj001','subj002','subj003','subj004','subj005']
 
 dwi_dir='dti96trilin'
 
@@ -262,9 +264,6 @@ def wbFiberDensity():
 
 ######### main deal 
 if __name__ == '__main__':
-
-	
-	subjects = ['subj001']
 
 
 	# now loop through subjects	
