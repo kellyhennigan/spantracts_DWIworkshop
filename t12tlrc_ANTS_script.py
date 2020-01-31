@@ -86,7 +86,7 @@ if __name__ == '__main__':
 		
 			
 		# define subject's raw & pre-processed directories 
-		t1_fs = os.path.join(t1_dir,'t1_fs.nii.gz') % (subject)# acpc aligned freesurfer t1
+		t1_fs = os.path.join(t1_dir,'t1_acpc.nii.gz') % (subject)# acpc aligned freesurfer t1
 		t1_ns = os.path.join(t1_dir,'t1_ns.nii.gz') % (subject) # name for skullstripped t1
 		t1_tlrc =  os.path.join(t1_dir,'t1_tlrc.nii.gz') % (subject) # name for t1 in tlrc space
 		xform = os.path.join(t1_dir,'t12tlrc_xform_') % (subject)  # name for t1 > tlrc xform

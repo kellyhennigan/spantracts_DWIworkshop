@@ -22,17 +22,23 @@
 % http://white.stanford.edu/newlm/index.php/DTI_Preprocessing
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% define relevant input 
+% define variables, directories, etc.
 clear all
 close all
 
-p=getFmrieatPaths;
-subjects=whichFmrieatSubjects('dti');
+mainDir = '/home/span/lvta/dwi_workshop';
+scriptsDir = [mainDir '/scripts']; % this should be the directory where this script is located
+dataDir = [mainDir '/data']; 
 
 
-dwRawPath=fullfile(p.raw,'%s','dwi','dwi.nii.gz'); %s will be subject id
-t1Path=fullfile(p.derivatives,'%s','anat_proc','t1_acpc.nii.gz'); %s will be subject id
+% add scripts to matlab's search path
+path(path,genpath(scriptsDir)); % add scripts dir to matlab search path
+
+
+subjects = {'subj001','subj002','subj003','subj004','subj005'};
+
+dwRawPath=fullfile(dataDir,'%s','raw','dwi.nii.gz'); %s will be subject id
+t1Path=fullfile(dataDir,'%s','t1','t1_acpc.nii.gz'); %s will be subject id
 
 %% do it
 
@@ -70,29 +76,19 @@ for i = 1:numel(subjects)
     [outDir,~]=fileparts(dt6file);    % e.g., dti80trilin
     [~,outStr]=fileparts(outBaseDir); % e.g., dwi_aligned_trilin 
     
+    
 %% move aligned data from raw to new outDir
 % and fix dt6 file structure accordingly
 
-newOutDir = fullfile(p.derivatives,subject,'dti96trilin');
-
-
 dt=load(dt6file);
-movefile([outBaseDir '*'],outDir); 
-movefile(fullfile(p.raw,subject,'*b0*'),outDir);
-movefile(fullfile(p.raw,subject,'dtiInitLog*'),outDir);
+movefile([outBaseDir '*'],outDir); movefile([p.subj, '/*b0*'],outDir);
+movefile([p.subj, '/dtiInitLog.mat'],outDir);
 
-movefile(outDir,newOutDir); % move outdir to derivatives subject folder for BIDs format
-
-dt.files.alignedDwRaw = fullfile(newOutDir,[outStr '.nii.gz']);
-dt.files.alignedDwBvecs = fullfile(newOutDir,[outStr '.bvecs']);
-dt.files.alignedDwBvals = fullfile(newOutDir,[outStr '.bvals']);
-dt.files.t1 = fullfile(p.derivatives,subject,'anat_proc','t1_acpc.nii.gz');
-
-% change dt6file name to reflect new output dir
-dt6file=fullfile(p.derivatives,subject,'dti96trilin/dt6.mat');
+dt.files.alignedDwRaw = fullfile(outDir,[outStr '.nii.gz']);
+dt.files.alignedDwBvecs = fullfile(outDir,[outStr '.bvecs']);
+dt.files.alignedDwBvals = fullfile(outDir,[outStr '.bvals']);
 save(dt6file,'-struct','dt');
 
-outDir = newOutDir; clear newOutDir
 
 %% check for any WM voxels with negative eigenvalues; if found, set to zero
 
