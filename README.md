@@ -22,10 +22,11 @@ This pipeline focuses on tracking fibers between 1) VTA and nucleus accumbens an
 
 ### Directory structure 
 
-Pipeline assumes the following directory structure:
+Pipeline assumes that the scripts in this repo sit in a "scripts" folder with following directory structure:
 
 ![directory structure](spantracts_directorystructure.png)
 
+Additional project-specific scripts can be housed in the "scripts" directory as well. 
 
 ### Permissions
 
@@ -72,7 +73,7 @@ mrAnatAverageAcpcNifti
 Use GUI to manually acpc-align t1 data 
 
 #### output
-Save out acpc-aligned nifti to **projectdir/data/anat_proc/t1_acpc.nii.gz**. 
+Save out acpc-aligned nifti to **projectdir/data/t1/t1_acpc.nii.gz**. 
 
 
 ### Run freesurfer recon
@@ -96,7 +97,7 @@ createRoiMasks_script.m
 To convert freesurfer segmentation files to be in nifti format & save out desired ROI masks based on FS segmentation labels. For example, save out NAcc, caudate, and putamen ROIs.  
 
 #### output
-Saves out files to directory, **projectdir/data/subjid/anat_proc**
+Saves out files to directory, **projectdir/data/subjid/t1**
 
 
 
@@ -112,7 +113,7 @@ xformROIs_script.m
 To estimate the tranform (using ANTs) between subject's acpc-aligned native space and standard space and to apply the inverse transform to take a given ROI in standard space > subject native space. For example, save out ROIs in native space that we defined on a group template, like VTA/SN, mPFC sphere, etc. 
 
 #### output
-Saves out acpc-aligned<->standard space transforms to directory, **projectdir/data/subjid/anat_proc**, and saves out a midbrain ROI ("DA.nii.gz") in directory: **projectdir/data/subjid/ROIs**
+Saves out acpc-aligned<->standard space transforms to directory, **projectdir/data/subjid/t1**, and saves out a midbrain ROI ("DA.nii.gz") in directory: **projectdir/data/subjid/ROIs**
 
 At this point, you should have ROI masks that will be used for tractography. Make sure these look how you expect!! To check that, load a subject's anatomy (t1.nii.gz) and ROI masks into your viewer of choice (e.g., ITKSnap, MRIcron, afni, FSL's viewer, or mrtrix's viewer, mrview) and confirm that the masks align nicely to the regions you care about. 
 
